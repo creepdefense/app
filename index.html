@@ -1,0 +1,1998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>CreepDefense</title>
+	<meta charset="utf-8" />
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+	
+	<meta name="mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	
+	<meta property="og:title" content="CreepDefense" />
+	<meta property="og:description" content="Defend your lands from creeps!" />
+	
+	<!--
+	<script src="three.js"></script>
+	-->
+	<!-- to get latest three.js use: https://unpkg.com/three@latest/build/three.module.js -->
+	<!-- to get latest shims.js use: https://unpkg.com/es-module-shims@latest/dist/es-module-shims.js -->
+	<script async src="./es-module-shims_1.3.6.js"></script> <!-- used to make imports work cross-browser, v 1.3.6 originally -->
+	<script type="importmap">{"imports":{"three":"./three.module.min_0.145.0.js"}}</script>
+
+	<script src="FileSaver.js"></script>
+
+	<link type="text/css" href="jquery/jquery-ui.css" rel="Stylesheet" />
+	<script type="text/javascript" src="jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="jquery/jquery-ui.min.js"></script>
+	
+	
+	<script src="riffwave.js"></script>
+	<script src="sfxr.js"></script>
+	
+	<script src="settings/settings.js"></script>
+
+<script>
+console.log(SETTINGS);
+</script>
+
+<style>
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+
+canvas {
+	//filter: blur( 1 ) brightness( 0.7 ) contrast( 0.4 ) grayscale( 0.4) hue-rotate( 0 ) invert( 0.5 ) opacity( 0.5 ) sepia( 0.5) saturate( 0.9 );
+	//filter: brightness( 1.6 ) saturate(4.5) hue-rotate(-25deg);
+	//filter: brightness( 1 ) saturate(4.5) hue-rotate(-25deg) contrast(1.5) invert(0.9)
+
+	-webkit-animation: filter-animation 4s infinite;
+	-animation: filter-animation 4s infinite;
+}
+
+@keyframes filter-animation {
+	0% {filter: hue-rotate(0deg);}
+	100% {filter: hue-rotate(360deg);}
+}
+
+@-webkit-keyframes filter-animation {
+	0% {-webkit-filter: hue-rotate(0deg);}
+	100% {-webkit-filter: hue-rotate(360deg);}
+}
+
+
+@keyframes filter-animation2 {
+	0% {filter: contrast(1) saturate(1) hue-rotate(0deg);}
+	50% {filter: contrast(6) saturate(0) hue-rotate(360deg);}
+	100% {filter: contrast(1) saturate(1) hue-rotate(0deg);}
+}
+
+@-webkit-keyframes filter-animation2 {
+	0% {-webkit-filter: contrast(1) saturate(1) hue-rotate(0deg);}
+	50% {-webkit-filter: contrast(6) saturate(0) hue-rotate(360deg);}
+	100% {-webkit-filter: contrast(1) saturate(1) hue-rotate(0deg);}
+}
+
+
+
+
+#loading_container {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+	
+
+	text-shadow: rgba(0,0,0,0.5) 0px 0px 1.5px, rgba(0,0,0,0.2) 0px 0px 5px, rgba(0,0,0,0.15) 0px 0px 10px;
+}
+
+
+#loading_container {
+    display: table;
+	position:absolute;
+
+	/* https://cssgradient.io/ */	
+
+	
+	background: rgb(2,0,36);
+	background: radial-gradient(circle, rgba(234,255,122,1) 0%, rgba(254,255,239,1) 18%, rgba(204,221,131,1) 24%, rgba(183,207,85,0.586046918767507) 28%, rgba(113,127,52,1) 31%, rgba(34,38,16,1) 34%, rgba(0,0,0,1) 41%, rgba(18,20,105,0.5300245098039216) 100%), linear-gradient(0deg, rgba(27,48,110,1) 10%, rgba(106,125,255,1) 55%, rgba(137,219,122,1) 60%, rgba(3,3,10,1) 83%, rgba(0,0,0,1) 100%);
+	
+	background-size: 100% 100%;
+	background-position: 50% 50%;
+	
+	animation: gradient 3s ease infinite;
+}
+
+@keyframes gradient {
+	0% {
+		background-size: 100% 100%;
+	}
+	50% {
+		background-size: 200% 200%;
+	}
+	100% {
+		background-size: 100% 100%;
+	}
+}
+
+
+#loading_container_inner {
+    display: table-cell;
+    margin: 0;
+    padding: 0;
+
+    text-align: center;
+    vertical-align: middle;
+}
+
+#loading_text {
+	font:40px verdana;
+	margin: auto;
+	color:#000;
+}
+
+#loading_desc {
+	font:12px verdana;
+	color:#000;
+}
+
+
+
+
+/* Pure CSS Loaders: https://loading.io/css/ */
+
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  top:40px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #000;
+  
+  box-shadow: rgba(0,0,0, 0.5) 0px 0px 1px, rgba(0,0,0, 0.5) 0px 0px 8px, rgba(0,0,0, 0.3) 0px 0px 16px;
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+
+
+
+
+
+/* Pure CSS Loaders: https://loading.io/css/ */
+
+.lds-ellipsis-left {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  top:40px;
+}
+.lds-ellipsis-left div {
+  position: absolute;
+  top: 33px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #000;
+  
+  box-shadow: rgba(0,0,0, 0.5) 0px 0px 1px, rgba(0,0,0, 0.5) 0px 0px 8px, rgba(0,0,0, 0.3) 0px 0px 16px;
+}
+.lds-ellipsis-left div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis-left1 0.6s infinite;
+}
+.lds-ellipsis-left div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis-left2 0.6s infinite;
+}
+.lds-ellipsis-left div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis-left2 0.6s infinite;
+}
+.lds-ellipsis-left div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis-left3 0.6s infinite;
+}
+@keyframes lds-ellipsis-left1 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis-left3 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis-left2 {
+  0% {
+    transform: translate(24px, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+
+</style>
+
+
+
+
+
+<style>
+* {
+	box-sizing: border-box;
+	cursor:default;
+}
+body {
+	background:#000;
+	color:#fff;
+	padding:0;
+	margin:0;
+	overflow:hidden;
+	font-family:courier;
+	text-align:left;
+	font-size:1.5vmax;
+}
+#gui {
+	display:none;
+}
+
+#fps {
+	position:absolute;
+	top:0;
+	right:0;
+	font:12px verdana;
+	padding:4px 4px 4px 10px;
+	--background-color:rgba(0,0,0, 0.5);
+	text-shadow: 0 0 3px #000000, 0 0 2px #000000, 0 0 1px #000000;
+	--border-bottom-right-radius:10px;
+}
+#info {
+	position: absolute;
+	bottom:0;
+	left:0;
+	width: 100%;
+	font:12px verdana;
+	border-top:1px solid rgba(255,255,255, 0.5);
+	padding:4px 4px 4px 10px;
+	background-color:rgba(0,0,0, 0.8);
+	text-shadow: 0 0 3px #000000, 0 0 2px #000000, 0 0 1px #000000;
+}
+.elem {
+	float:left;
+	padding-right:20px;
+}
+.elem span {
+	color:#FFFF00;
+}
+
+#players {
+	text-align:left;
+	position:absolute;
+	right:0;
+	top:0;
+	min-width:200px;
+	border-left:1px solid rgba(255,255,255, 0.5);
+	padding:5px;
+	background-color:rgba(0,0,0, 0.8);
+	font:1vmax courier;
+}
+
+
+
+#players-ending-scores {
+	text-align:left;
+	position:absolute;
+	left:50%;
+	top:15%;
+	margin-left:-18vmax;
+	margin-top:0;
+	width:36vmax;
+	padding:10px 10px 10px 10px;
+	background-color:rgba(0,0,0, 0.85);
+	border-radius:1.5vmax;
+	font-size:2vmax;
+}
+
+
+#countdown {
+	padding-top:15px;
+	width:100%;
+	text-align:center;
+}
+
+.hidden {
+	display:none;
+}
+
+
+#ending-score-table {
+	width:100%;
+}
+
+#ending-score-table .num {
+	width:2vmax;
+	padding-left:0.25vmax;
+	padding-right:0.25vmax;
+	text-align:right;
+}
+#ending-score-table .nam {
+	padding-left:0.5vmax;
+	padding-right:10px;
+}
+#ending-score-table .sco {
+	width:3vmax;
+	padding-left:0.5vmax;
+	padding-right:1vmax;
+}
+#ending-score-table .ext {
+	width:3vmax;
+	padding-left:1vmax;
+	padding-right:0.25vmax;
+	color:rgba(255,255,255, 0.5);
+}
+
+
+
+</style>
+
+
+<script>
+
+
+function getTimeMillis(){
+	var d = new Date();
+	return d.getTime();
+}
+
+
+
+
+var PARAMS = new Params();
+var SOUND;
+var SOUND_VOL = 0.1068; // see sfxr.js (var volume) for volume adjusting for browser. this changes the wav file but doesnt work well because it clips the sounds at too loud or low volumes.
+var SAMPLE_RATE = 44100;
+var SAMPLE_SIZE = 8;
+var CURRENT_TYPE = "";
+var LOCKED = {};
+</script>
+
+</head>
+<body>
+
+
+<style>
+#blocker {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+}
+</style>
+
+<div id="container"></div>
+<div id="blocker"></div>
+
+
+<style>
+.checkmark {
+	min-width:20px;
+	width:20px;
+	font:bold 14px verdana;
+	margin-right:5px;
+}
+
+.but_play, .but_new {
+	width:78px;
+}
+
+
+
+
+
+
+#pause_container {
+
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+	display:none;
+
+	position:absolute;
+	background: rgba(0,0,0, 0.7);
+	
+
+	background: radial-gradient(circle, rgba(0,0,0,0.4654236694677871) 0%, rgba(0,0,0,0.8939950980392157) 36%, rgba(0,0,0,1) 59%, rgba(0,0,0,1) 100%);
+
+	
+	background-size: 100% 100%;
+	background-position: 50% 50%;
+	
+	--animation: gradient 3s ease infinite;
+}
+
+@keyframes gradient {
+	0% {
+		background-size: 100% 100%;
+	}
+	50% {
+		background-size: 200% 200%;
+	}
+	100% {
+		background-size: 100% 100%;
+	}
+}
+
+
+#pause_container_inner {
+    display: table-cell;
+    margin: 0;
+    padding: 0;
+
+    text-align: center;
+    vertical-align: middle;
+}
+
+#pause_text {
+	font:bold 40px verdana;
+	margin: auto;
+	color: #000;
+	text-shadow: 0 -1px 4px #FFF, 0 -2px 10px #ff0, 0 -18px 40px #F00;
+}
+
+#pause_desc {
+	font:bold 14px verdana;
+	color: #000;
+	
+	text-shadow: 0 -1px 2px rgba(255,255,255,0.6), 0 -2px 5px rgba(255,255,0,0.6);
+
+}
+#pause_container .lds-ellipsis-left div {
+	--background: #FFF;
+}
+#pause_container .lds-ellipsis div {
+	--background: #FFF;
+}
+
+#messages_container {
+	display:none;
+	font:12px verdana;
+	width:100%;
+	text-align:center;
+	position:absolute;
+	top:0;
+	left:0;
+	overflow:hidden;
+	max-height:70px;
+}
+
+.message_line {
+	width:100%;
+	text-align:center;
+}
+
+.message {
+	display:inline-block;
+	padding:4px 10px 4px 10px;
+	background-color:rgba(0,0,0, 0.5);
+	text-shadow: 0 0 3px #000000, 0 0 2px #000000, 0 0 1px #000000;
+	border-radius:10px;
+}
+
+
+.flash {
+	animation: flash_anim 3s linear infinite;
+	animation-iteration-count: 1;
+}
+@keyframes flash_anim {
+	0% {
+		opacity: 1;
+		color:#FFFF00;
+	}
+	2% {
+		opacity: 0;
+		color:#000000;
+	}
+	4% {
+		opacity: 1;
+		color:#FFFF00;
+	}
+	6% {
+		opacity: 0;
+		color:#000000;
+	}
+	8% {
+		opacity: 1;
+		color:#FFFF00;
+	}
+	100% {
+		opacity: 1;
+		color:#FFFFFF;
+	}
+}
+
+.keystable {
+	
+}
+.keys_name {
+
+}
+.keys_desc {
+
+}
+
+</style>
+
+<div id="loading_container"><div id="loading_container_inner">
+	<div id="loading_text">
+		<div class="lds-ellipsis-left"><div></div><div></div><div></div><div></div></div>Loading<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+	</div>
+	<div id="loading_desc">Working...</div>
+</div></div>
+
+
+
+
+<div id="pause_container"><div id="pause_container_inner">
+	<div id="pause_text">GAME PAUSED</div>
+	<div id="pause_desc">
+		<span id="by_enter">Press ESC</span><span id="by_click">Click</span> to unpause
+	</div>
+			
+	
+	<div>
+		<div>Keys</div>
+		<table class="keystable">
+		<tr><td class="keys_name">Send lvl 1 creeps</td><td class="keys_desc">1,2,3,4</td></tr>
+		<tr><td class="keys_name">Send lvl 2 creeps</td><td class="keys_desc">Q,W,E,R</td></tr>
+		<tr><td class="keys_name">Send lvl 3 creeps</td><td class="keys_desc">A,S,D,F</td></tr>
+		<tr><td class="keys_name">Send lvl 4 creeps</td><td class="keys_desc">Z,X,C,V</td></tr>
+		
+		<tr><td class="keys_name">Tower settings</td><td class="keys_desc">U,I,O,P,J,K,L,0</td></tr>
+
+
+		<!--<tr><td class="keys_name">xxxx</td><td class="keys_desc">xxxx</td></tr>
+		<tr><td class="keys_name">xxxx</td><td class="keys_desc">xxxx</td></tr>
+		<tr><td class="keys_name">xxxx</td><td class="keys_desc">xxxx</td></tr>
+		<tr><td class="keys_name">xxxx</td><td class="keys_desc">xxxx</td></tr>
+		-->
+		</table>
+	</div>
+	
+
+	
+</div></div>
+
+<div id="messages_container">
+
+</div>
+
+
+<div id="gui">
+
+
+
+	<div id="info">
+		<div id="fps">
+		FPS: 0
+		</div>
+		
+		<div class="elem">
+			Sent: <span id="player-sent-creeps">0</span>
+		</div>
+		<div class="elem">
+			Killed: <span id="player-killed-creeps">0</span>
+		</div>
+		<div class="elem">
+			Damage given: <span id="player-damage-given">0</span>
+		</div>
+		<div class="elem">
+			Lives taken: <span id="player-lives-taken">0</span>
+		</div>
+		<div class="elem">
+			Built: <span id="player-built-towers">0</span>
+		</div>
+		<div class="elem">
+			Sold: <span id="player-sold-towers">0</span>
+		</div>
+		<div class="elem">
+			Sold money: <span id="player-sold-money">0</span>
+		</div>
+		<div class="elem">
+			Money spent: <span id="player-money-spent">0</span>
+		</div>
+		<div class="elem">
+			Income: <span id="player-income">0</span>
+		</div>
+		<div class="elem">
+			Lives: <span id="player-lives">0</span>
+		</div>
+	</div>
+
+
+	<div id="players">
+		<div id="scores">
+			sdgds
+		</div>
+	</div>
+
+	<div id="players-ending-scores" class="hidden">
+		<div id="ending-scores">
+		</div>
+		<div id="countdown"></div>
+	</div>
+</div>
+
+<div id="imagecache"></div>
+
+
+<script type="module">
+"use strict";
+
+import * as THREE from 'three';
+
+
+
+
+
+let CANVAS_W;
+let CANVAS_H;
+
+var SCREEN_MID_X = 0;
+var SCREEN_MID_Y = 0;
+
+let INTERNAL_ZOOM = 1;
+let ZOOM_MULTI = 1.08;
+
+let MAX_TEX_SIZE = 1024;
+
+let antialiasing = true;
+
+
+
+var contextmenu_enabled = false;
+
+var window_focus = true;
+
+let loading_start_time = 0;
+
+
+
+
+let nearplane = -200; // default 0.1, not sure why. but 0 is allowed for ortho according to docs.
+let farplane = 200; // how far camera can see. dont set too large or depth testing breaks.
+
+
+
+var controls, camera, scene, renderer;
+
+
+function get_dist_2d(p1x, p1y, p2x, p2y){
+	return Math.sqrt((p2x-p1x)*(p2x-p1x)+(p2y-p1y)*(p2y-p1y));
+}
+
+
+
+// generate_collision_data generate collision data
+function generate_hit_data(tex){
+	let data_w = tex.image.width;
+	let data_h = tex.image.height;
+	
+	let outData = new Uint8Array(data_w*data_h);
+	
+	const tempCanvas = document.createElement('canvas');
+	tempCanvas.width = data_w;
+	tempCanvas.height = data_h;
+
+	const tempCtx = tempCanvas.getContext('2d');
+	tempCtx.drawImage(tex.image, 0, 0);
+
+	const imageData = tempCtx.getImageData(0, 0, data_w, data_h);
+	
+	for(let y = 0; y < data_h; y++){
+		for(let x = 0; x < data_w; x++){
+			outData[y*data_w+x] = imageData.data[y*data_w*4+x*4+3]; // +3 = alpha channel.
+		}
+	}
+	
+	return outData;
+}
+
+
+
+let creeptextures = [];
+let towertextures = [];
+
+function load_creeps(){
+	for(let i = 1; i <= 16; i++){
+		let path = "mods/"+MOD_NAME+"/modes/"+SIZEMOD+"/creeps/"+i+".png";
+		let loadedTextureName = "creep_"+i;
+		
+		let temptex = new THREE.TextureLoader().load(path, function(tex){
+			tex.image = correct_texture_size(tex.image);
+			set_loading_desc(loadedTextureName+" loaded");
+			
+			tex.minFilter = THREE.LinearFilter;
+			tex.magFilter = THREE.LinearFilter;
+			
+			if(force_nearest_globally){
+				tex.minFilter = THREE.NearestFilter;
+				tex.magFilter = THREE.NearestFilter;
+			}
+			
+			tex.repeat.x = 1;
+			tex.repeat.y = 1;
+			
+			tex.wrapS = THREE.RepeatWrapping;
+			tex.wrapT = THREE.RepeatWrapping;
+
+			set_loaded_flag(loadedTextureName, true);
+		}, null, function(err){
+			set_loaded_flag(loadedTextureName, true);
+			show_texture_loading_warning(err);
+		});
+		creeptextures.push(temptex);
+
+	}
+}
+
+function load_towers(){
+	for(let i = 1; i <= 6; i++){
+		let path = "mods/"+MOD_NAME+"/modes/"+SIZEMOD+"/towers/"+i+".png";
+		let loadedTextureName = "tower_"+i;
+		
+		let temptex = new THREE.TextureLoader().load(path, function(tex){
+			tex.image = correct_texture_size(tex.image);
+			set_loading_desc(loadedTextureName+" loaded");
+			
+			tex.minFilter = THREE.LinearFilter;
+			tex.magFilter = THREE.LinearFilter;
+			
+			if(force_nearest_globally){
+				tex.minFilter = THREE.NearestFilter;
+				tex.magFilter = THREE.NearestFilter;
+			}
+			
+			tex.repeat.x = 1;
+			tex.repeat.y = 1;
+			
+			tex.wrapS = THREE.RepeatWrapping;
+			tex.wrapT = THREE.RepeatWrapping;
+
+			set_loaded_flag(loadedTextureName, true);
+		}, null, function(err){
+			set_loaded_flag(loadedTextureName, true);
+			show_texture_loading_warning(err);
+		});
+		towertextures.push(temptex);
+	}
+	
+	
+}
+
+
+function create_tower(x, y, type, level, owner){
+	let tex = towertextures[type-1];
+	let geometry = new THREE.PlaneGeometry(tex.image.width, tex.image.height);
+	let material = new THREE.MeshBasicMaterial({map: tex, color: 0x00FF00});
+	
+	let mesh = new THREE.Mesh(geometry, material);
+	mesh.position.x = x;
+	mesh.position.y = y;
+	mesh.position.z = 120;
+	mesh.material.opacity = 1;
+	mesh.material.transparent = true;
+	scene.add(mesh);
+}
+
+function create_towers(){
+	create_tower(128+64,128+64, 1, 1, MY_PLAYER);
+}
+
+
+
+function create_creep(x, y, type, level, owner){
+	let tex = creeptextures[type-1];
+	let geometry = new THREE.PlaneGeometry(tex.image.width, tex.image.height);
+	let material = new THREE.MeshBasicMaterial({map: tex, color: 0xFFFFFF});
+	
+	let mesh = new THREE.Mesh(geometry, material);
+	mesh.position.x = x;
+	mesh.position.y = y;
+	mesh.position.z = 10;
+	mesh.material.opacity = 1;
+	mesh.material.transparent = true;
+	scene.add(mesh);
+}
+
+
+
+let cube;
+let cursor;
+
+function pre_init(){
+	loading_start_time = getTimeMillis();
+	
+	console.log("pre init");
+
+	CANVAS_W = window.innerWidth;
+	CANVAS_H = window.innerHeight;
+
+
+	scene = new THREE.Scene();
+	
+	camera = new THREE.OrthographicCamera( -CANVAS_W/2, CANVAS_W/2, CANVAS_H/2, -CANVAS_H/2, nearplane, farplane);
+	camera.zoom = INTERNAL_ZOOM;
+
+
+	{
+		let geometry = new THREE.PlaneGeometry(BLOCK_W, BLOCK_H);
+		let material = new THREE.MeshBasicMaterial( { color: 0xFFFFFF } );
+		
+		cursor = new THREE.Mesh( geometry, material );
+		cursor.position.x = 0;
+		cursor.position.y = 0;
+		cursor.position.z = 100;
+		cursor.material.opacity = 0.5;
+		cursor.material.transparent = true;
+		scene.add( cursor );
+	}
+	
+	/*
+	let geometry = new THREE.BoxGeometry( 50, 50, 50 );
+	let material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+	cube = new THREE.Mesh( geometry, material );
+	cube.position.x = -20;
+	cube.position.y = 30;
+	cube.position.z = 0;
+	scene.add( cube );
+	*/
+	
+	/*
+	{
+		const geometry = new THREE.SphereGeometry( 25, 10, 10 );
+
+		const wireframe = new THREE.WireframeGeometry( geometry );
+
+		const cube = new THREE.LineSegments( wireframe );
+		cube.material.depthTest = true;
+		cube.material.opacity = 0.5;
+		cube.material.transparent = true;
+
+		scene.add( cube );
+		
+		console.log(cube);
+	}*/
+
+
+	camera.position.z = 5;
+	
+	
+
+	load_map();
+	load_creeps();
+	load_towers();
+
+/*
+	// load map settings:
+	$.getJSON(MAP_DATA_URL, function(json){
+		loaded.map_settings = true;
+		
+		console.log("MAP SETTINGS:");
+		console.log(json);
+		
+		// combine map_defaults with map settings.json:
+		mapinfo = Object.assign(map_defaults, json);
+		
+		// todo: should load all map textures etc after map settings are loaded!
+		load_map();
+		
+	}).fail(function(){
+		console.error("ERROR: Could not read file: '"+MAP_DATA_URL+"'! File may be missing or incorrectly formatted (JSON is strict format, commas cannot be in end of lines unless another item comes after. All keys must be surrounded by double quotes, and all strings must be surrounded by double quotes).");
+	});
+	*/
+	
+	
+	renderer = new THREE.WebGLRenderer( { antialias: antialiasing });
+	renderer.autoClear = false;
+	renderer.setPixelRatio(window.devicePixelRatio);
+	
+	console.log("window.devicePixelRatio = "+window.devicePixelRatio);
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	//renderer.setSize(window.innerWidth, window.innerHeight, false); // Setting updateStyle to false prevents any style changes to the output canvas.
+	document.body.appendChild(renderer.domElement);
+	
+	MAX_TEX_SIZE = renderer.capabilities.maxTextureSize;
+	console.warn("renderer.capabilities:");
+	console.warn(renderer.capabilities);
+	
+	renderer.domElement.addEventListener('webglcontextlost', (e) => {
+		push_message("ERROR: GL CONTEXT LOST. BROWSER RESTART MAY BE REQUIRED TO CONTINUE.", true, 20000);
+	}, false);
+	
+	renderer.domElement.addEventListener('webglcontextrestored', (e) => {
+		push_message("GL CONTEXT RESTORED", true);
+	}, false);
+	
+	
+
+	window.addEventListener('resize', onWindowResize, false);
+}
+
+
+
+
+
+
+
+
+function stringify(obj){
+	return JSON.stringify(obj);
+}
+
+
+function get_loaded_flags(){
+	let out = "";
+	for(let key in LOADED){
+		if(LOADED.hasOwnProperty(key)){
+			if(!LOADED[key].loaded){
+				out += key+", ";
+			}
+		}
+	}
+	return out;
+}
+
+let tex_error_timeout = null;
+
+
+// map_loaded
+function game_loaded(){
+
+	if(gameLoadedVar) return true;
+	
+	for(let key in LOADED){
+		if(LOADED.hasOwnProperty(key)){
+			if(!LOADED[key].loaded){
+				tex_error_timeout = setTimeout(function(){
+					let flags = get_loaded_flags();
+					if(flags.length > 0){
+						console.error("textures not loaded: "+flags);
+					}
+				}, 5000);
+				
+				return false;
+			}
+		}
+	}
+	
+	clearTimeout(tex_error_timeout);
+	
+
+
+	console.warn("game loaded.");
+	//console.warn(stringify(GRAVITY));
+	
+	set_loading_desc("Post-initialization");
+
+	console.log("game loaded... post initializating...");
+	
+	post_init();
+
+	let game_loading_time = (getTimeMillis()-loading_start_time)/1000;
+	console.log("GAME LOADED IN "+game_loading_time.toFixed(3)+" seconds");
+	
+	show_messages();
+	push_message("Game loaded in "+game_loading_time.toFixed(3)+" seconds");
+	
+	
+	
+	return true;
+}
+
+
+
+function post_init(){
+	generate_sounds();
+
+	create_towers();
+
+	gameLoadedVar = true;
+	
+	if(guivisible){
+		$("#gui").show();
+	}else{
+		$("#gui").hide();
+	}
+	
+	onWindowResize();
+
+}
+
+
+var CACHED_SOUND_EFFECTS = {};
+// max_sounds max sounds
+
+let sounds_detail = 1;
+var MAX_SOUND_ALTS; // good for without downloading sound caches.
+let param_step;
+let param_min_val;
+
+if(sounds_detail == 1){
+	MAX_SOUND_ALTS = 4; // good for dev mode.
+	param_step = 2.8;
+	param_min_val = 0.08;
+}else if(sounds_detail == 2){
+	MAX_SOUND_ALTS = 13; // good for without downloading sound caches.
+	param_step = 1.3;
+	param_min_val = 0.08;
+}else if(sounds_detail == 3){
+	MAX_SOUND_ALTS = 64;
+	param_step = 1.05;
+	param_min_val = 0.06;
+}
+
+
+
+
+// load_sounds loading sounds generating_sounds generating sounds
+function generate_sounds(){
+	let i = 1;
+	for(var soundName in SOUNDS) {
+		if(SOUNDS.hasOwnProperty(soundName)){
+			set_loading_desc("Generating sound "+i);
+			i++;
+			generate_sound_caches(soundName);
+		}
+	}
+	
+	console.log("CACHED_SOUND_EFFECTS");
+	console.log(CACHED_SOUND_EFFECTS);
+}
+
+
+function generate_sound_caches(soundName){
+	let newPARAMS = SOUNDS[soundName];
+	
+	if(newPARAMS[0] != 1){
+		console.log("unknown sound version '"+newPARAMS[0]+"'");
+		console.log(newPARAMS);
+		return;
+	}
+	
+	let order = ['jsfxr_version', 'wave_type', 'p_env_attack','p_env_sustain','p_env_punch','p_env_decay','p_base_freq','p_freq_limit','p_freq_ramp','p_freq_dramp','p_vib_strength','p_vib_speed','p_arp_mod','p_arp_speed','p_duty','p_duty_ramp','p_repeat_speed','p_pha_offset','p_pha_ramp','p_lpf_freq','p_lpf_ramp','p_lpf_resonance','p_hpf_freq','p_hpf_ramp','sound_vol'];
+	
+	let output = {};
+	output['oldParams'] = true;
+	output['sample_rate'] = 44100;
+	output['sample_size'] = 8;
+
+	for(let i = 1; i < order.length; i++){
+		output[order[i]] = newPARAMS[i];
+	}
+	
+	PARAMS.fromJSON(output);
+
+	if(typeof CACHED_SOUND_EFFECTS[soundName] === "undefined"){
+		CACHED_SOUND_EFFECTS[soundName] = {};
+	}
+	
+	let max_sounds_gen = MAX_SOUND_ALTS;
+	
+	let distant_sounds = (soundName[0] !== '_') ? true : false; // non-distant sounds have underscore at start of name.
+	if(!distant_sounds){
+		max_sounds_gen = 1;
+	}
+	
+	//let step = (PARAMS['p_lpf_freq']-param_min_val)/MAX_SOUND_ALTS;
+	
+	for(let i = 0; i < max_sounds_gen; i++){
+		SOUND = new SoundEffect(PARAMS).generate();
+		if(typeof CACHED_SOUND_EFFECTS[soundName]['sound'] === "undefined"){
+			CACHED_SOUND_EFFECTS[soundName]['sound'] = [];
+		}
+		CACHED_SOUND_EFFECTS[soundName]['sound'].push(SOUND);
+		CACHED_SOUND_EFFECTS[soundName]['params'] = PARAMS;
+	
+		PARAMS['p_lpf_freq'] /= param_step; // aka "cutoff frequency"
+		//PARAMS['p_lpf_freq'] -= step;
+		if(PARAMS['p_lpf_freq'] <= param_min_val) PARAMS['p_lpf_freq'] = param_min_val;
+	}
+}
+
+
+function play_sound(soundName, sound_x, sound_z){
+	if(typeof CACHED_SOUND_EFFECTS[soundName] === "undefined"){
+		return;
+	}
+	
+	let play_sound = true;
+	let dist_sound = 0;
+	let is_distant_sound = (soundName[0] !== '_') ? true : false; // starting with underscore = single sound.
+	
+	if(is_distant_sound){
+		let px = players[myPlayer].x;
+		let pz = players[myPlayer].z;
+		let dist = get_dist_2d(px, pz, sound_x, sound_z);
+		
+		let max_audible_dist = 3000;
+
+		if(dist > 3000){
+			play_sound = false;
+		}else{
+			if(dist > max_audible_dist){
+				dist = max_audible_dist;
+			}
+			dist_sound = Math.round((dist/max_audible_dist)*(MAX_SOUND_ALTS-1));
+			let total_sounds = CACHED_SOUND_EFFECTS[soundName]['sound'].length;
+			if(dist_sound < 0) dist_sound = 0;
+			if(dist_sound > total_sounds-1) dist_sound = total_sounds-1;
+		}
+	}
+	if(play_sound){
+		//console.log("dist_sound = "+dist_sound);
+		SOUND = CACHED_SOUND_EFFECTS[soundName]['sound'][dist_sound];
+		SOUND.getAudio().play();
+	}
+}
+
+
+
+let game_paused = false;
+let game_paused_by_enter = false;
+
+var frameTime_val = getTimeMillis();
+var frameNumber_val = 0;
+var framesPerFps = 20; // interval of frames how often fps is updated.
+var guivisible = true;
+
+var prevFpsTime = 0;
+
+var loadingTextVisible = true;
+
+
+function updateFPS(){
+	if(prevFpsTime == 0){
+		prevFpsTime = getTimeMillis();
+		return;
+	}
+	let ms = getTimeMillis()-prevFpsTime;
+	let fps = 1000/(ms/framesPerFps);
+	$('#fps').html("FPS: "+fps.toFixed(1));
+	prevFpsTime = getTimeMillis();
+}
+
+
+
+function updateInfo(){
+
+}
+
+
+// render()
+function render(renderFrame){
+
+	if(game_paused){
+		return;
+	}
+	frameNumber_val++;
+	frameTime_val = getTimeMillis();
+	
+
+	if(!game_loaded()){
+		return;
+	}else{
+		if(loadingTextVisible){
+			$("#loading_container").hide();
+			loadingTextVisible = false;
+		}
+	}
+	
+	if((frameNumber_val % framesPerFps) == 0){
+		updateFPS();
+	}
+	
+		
+	if(guivisible){
+		if((frameNumber_val % 5) == 0){
+			updateInfo();
+		}
+	}
+	
+	
+	
+	//cube.rotation.x += 0.011;
+	//cube.rotation.y += 0.017;
+	//cube.rotation.z += 0.019;
+	
+	
+	//TEXTURES.map_back.tex.offset.x += 0.00019;
+	//TEXTURES.map_back.tex.offset.y += 0.00012;
+
+	
+	TEXTURES.map_back.tex.center.x = 0.5;
+	TEXTURES.map_back.tex.center.y = 0.5;
+	
+	TEXTURES.map_back.tex.rotation += 0.003;
+	
+	
+	
+	renderer.render( scene, camera );
+}
+
+
+function animate() {
+	let f = requestAnimationFrame( animate );
+	render(f);
+}
+
+
+
+function onWindowResize() {
+	CANVAS_W = window.innerWidth;
+	CANVAS_H = window.innerHeight;
+	
+	SCREEN_MID_X = CANVAS_W/2;
+	SCREEN_MID_Y = CANVAS_H/2;
+	
+	//
+	camera.aspect = window.innerWidth / window.innerHeight;
+
+	camera.left = window.innerWidth * camera.aspect / -2;
+    camera.right = window.innerWidth * camera.aspect / 2;
+	
+	camera.top = window.innerHeight * camera.aspect / 2;
+    camera.bottom = window.innerHeight * camera.aspect / -2;
+	
+	camera.updateProjectionMatrix();
+	
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	
+	console.log("window new size: "+window.innerWidth+"x"+window.innerHeight);
+	
+
+	
+	$("#players").css("height", window.innerHeight-$("#info").outerHeight()+1);
+
+
+}
+
+
+
+let drag_start = {x:0, y:0};
+let drag_enabled = false;
+
+
+
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+
+function onPointerMove( event ) {
+
+	
+	// calculate pointer position in normalized device coordinates
+	// (-1 to +1) for both components
+	
+	if(game_loaded()){
+
+
+		pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+		pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+		
+		
+		if(drag_enabled){
+			camera.position.x = prev_camera.x + (drag_start.x-event.clientX)*camera.aspect/camera.zoom;
+			camera.position.y = prev_camera.y + (event.clientY-drag_start.y)*camera.aspect/camera.zoom;
+			camera.updateProjectionMatrix();
+		}
+		
+		
+		// update the picking ray with the camera and pointer position
+		raycaster.setFromCamera( pointer, camera );
+
+		// calculate objects intersecting the picking ray
+		const intersects = raycaster.intersectObjects( MESHES.map_map );
+		
+		MESHES.map_map[0].material.color.set(0xFFFFFF);
+
+		if(intersects.length > 0){
+			//console.log("isect:",intersects);
+
+			// can intersect multiple meshes, just take the first:
+			let isect = intersects[0];
+			//isect.object.material.color.set( 0x8888ff );
+			
+			let block_w = MAP_W/16;
+			let block_h = MAP_H/16;
+			
+			cursor.position.x = Math.floor(isect.point.x/block_w)*block_w + block_w/2;
+			cursor.position.y = Math.floor(isect.point.y/block_h)*block_h + block_h/2;
+			
+			//console.log(isect.point.x, isect.point.y);
+
+		}
+		
+		
+	}
+}
+
+
+window.addEventListener( 'pointermove', onPointerMove );
+
+
+let prev_camera = {x:0, y:0};
+
+document.addEventListener("mousedown", onDocumentMouseDown, false);
+function onDocumentMouseDown(event){
+	if(!game_paused && gameLoadedVar){
+		
+		
+		if(event.button == 0){ // left click leftclick
+			create_tower(cursor.position.x, cursor.position.y, 6, 1, MY_PLAYER);
+		
+		}else if(event.button == 1){ // middle click
+		
+			
+			if(!drag_enabled){
+				drag_start  = {x: event.clientX,     y: event.clientY};
+				prev_camera = {x: camera.position.x, y: camera.position.y};
+				
+				drag_enabled = true;
+				
+				//console.log("drag enabled");
+			}
+			
+			//console.log(drag_start);
+
+
+
+		}else if(event.button == 2){ // right click
+			create_creep(cursor.position.x, cursor.position.y, 16, 1, MY_PLAYER);
+		}
+	}
+	
+	stopEvent(event); // prevent any other handling of these events by browser.
+}
+
+
+document.addEventListener("mouseup", onDocumentMouseUp, false);
+function onDocumentMouseUp(event){
+	// dont check paused here or keys can get stuck after unpausing.
+	if(gameLoadedVar){
+		if(event.button == 0){ // left click
+			//shooting_started = false;
+			//can_shoot = false;
+		}else if(event.button == 1){ // middle click
+			//console.log("drag disabled");
+			//console.log(event.clientX);
+
+			
+			drag_enabled = false;
+
+			
+		}else if(event.button == 2){ // right click
+			
+		}
+	}
+}
+
+
+// if val distance to target is less or equal range.
+function is_near(val, target){
+	let range = 0.01;
+	return (Math.abs(val-target) <= range);
+}
+
+
+
+// middle mouse middle button middle mouse button mousewheel scroll button
+document.addEventListener('wheel', onDocumentWheel, {passive: false});
+function onDocumentWheel(event){
+	if(!game_paused){
+		if(event.deltaY < 0){
+			// UP:
+			INTERNAL_ZOOM *= ZOOM_MULTI;
+		}else{
+			// DOWN:
+			INTERNAL_ZOOM /= ZOOM_MULTI;
+		}
+		if(INTERNAL_ZOOM > 10) INTERNAL_ZOOM = 10;
+		if(INTERNAL_ZOOM < 0.1) INTERNAL_ZOOM = 0.1;
+		
+		
+		// lock zoom to special multipliers (powers of two basically).
+		let tempzoom = INTERNAL_ZOOM;
+		let mults   = [0.25, 0.5, 1, 2, 3, 4];
+		let multstr = ["1/4", "1/2", "1x", "2x", "3x", "4x"];
+		for(let i = 0; i < mults.length; i++){
+			if(is_near(tempzoom, mults[i])){
+				tempzoom = mults[i];
+				console.log("zoom is exactly "+tempzoom);
+				push_message("Zoom is exactly "+multstr[i], true);
+				break;
+			}
+		}
+
+		camera.zoom = tempzoom;
+		camera.updateProjectionMatrix();
+	}
+}
+
+
+let force_nearest_globally = false;
+
+let MAP_W = 2048;
+let MAP_H = 2048;
+
+let BLOCKS_X = 16;
+let BLOCKS_Y = 16;
+
+let BLOCK_W = MAP_W/BLOCKS_X;
+let BLOCK_H = MAP_H/BLOCKS_Y;
+
+let MAPCONST = {
+	size16x16: {w: MAP_W, h: MAP_H},
+	size32x16: {w: MAP_W*2, h: MAP_H},
+	size32x32: {w: MAP_W*2, h: MAP_H*2},
+};
+
+
+console.log("MAP_W/H = "+MAP_W+"x"+MAP_H);
+console.log("BLOCKS_X/Y = "+BLOCKS_X+"x"+BLOCKS_Y);
+console.log("BLOCK_W/H = "+BLOCK_W+"x"+BLOCK_H);
+
+function random_str(len){
+	const alphanumeric = "abcdefghijklmnopqrstuvwxyz0123456789";
+	let out = "";
+	for(let i = 0; i < len; i++){
+		out += alphanumeric[Math.floor(Math.random()*alphanumeric.length)];
+	}
+	return out;
+}
+
+function randomVersion(){
+	return "?v="+random_str(20);
+}
+
+
+function show_messages(){
+	$("#messages_container").show();
+}
+
+
+
+function push_message(message, flash_message, time_visible){
+	if(typeof flash_message === "undefined"){
+		flash_message = false;
+	}
+	if(typeof time_visible === "undefined"){
+		time_visible = 5000;
+	}
+	let flashClass = flash_message ? " flash" : "";
+
+	let elem = "#messages_container";
+	// stop fadeout animation and set to full opacity:
+	if($(elem).is(':animated')) {
+		//$(elem).stop().animate({opacity:'100'});
+	}else{
+		//$(elem).show();
+	}
+	//$(elem).show();
+	//$("#messages_container").show();
+	let msg_id = "msg_"+random_str(10);
+	  
+	$(elem).append($('<div class="message_line" id="'+msg_id+'"></div>').html($('<span class="message'+flashClass+'"></span>').text(message)));
+	$(elem).animate({ scrollTop: $(elem).prop("scrollHeight")}, 0);
+	//$(elem).fadeOut(3000);
+	
+	// if -1 as time, then never remove it.
+	if(time_visible >= 0){
+		setTimeout(function(){$("#"+msg_id).remove();}, time_visible);
+	}
+	
+	
+	//$(elem).scrollTop($(elem).prop("scrollHeight"));
+	
+}
+
+function set_loading_desc(text){
+	$("#loading_desc").text(text);
+	console.log("LOADER: "+text);
+	
+	push_message("LOADER: "+text);
+}
+
+function show_texture_loading_warning(err){
+	console.warn("Could not load texture: \""+err.path[0].currentSrc+"\", ignoring it.");
+}
+
+var urlprefix = ""; // possibly used when using (node.js) server to host files at url such as "https://md.com/".
+
+var gameLoadedVar = false;
+
+let MAP_LAYERS = {
+	'map_back': {
+		z: -50,
+	},
+	'map_map': {
+		z: 0,
+	},
+	'map_front': {
+		z: 50,
+	},
+};
+
+// list of things loaded or not. game wont start until all are loaded.
+var LOADED = {
+	map_back:  {loaded: true, visibleName: "map back"},
+	map_map:   {loaded: true, visibleName: "map"},
+	map_front: {loaded: true, visibleName: "map front"},
+};
+for(let i = 1; i <= 16; i++){
+	LOADED["creep_"+i] = {loaded: true, visibleName: "creep "+i};
+}
+for(let i = 1; i <= 6; i++){
+	LOADED["tower_"+i] = {loaded: true, visibleName: "tower "+i};
+}
+
+var MESHES = {
+	'map_back': [],
+	'map_map': [],
+	'map_front': [],
+};
+
+
+
+// maptest map_test test_map
+var MAP_NAME = "testmap_new";
+var MOD_NAME = "creepdefense";
+var SIZEMOD = "extralarge3x";
+
+var MY_PLAYER = 0;
+var AI_PLAYER = -1;
+
+// default textures, can be overridden by map and mod.
+var TEXTURES = {
+	'map_back':  {path: 'maps/'+MAP_NAME+'/back.png',  tex: null},
+	'map_map':   {path: 'maps/'+MAP_NAME+'/map.png',   tex: null},
+	'map_front': {path: 'maps/'+MAP_NAME+'/front.png', tex: null},
+};
+
+function set_loaded_flag(loadedTextureName, flag){
+	LOADED[loadedTextureName].loaded = flag;
+
+}
+function get_loaded_visibleName(loadedTextureName){
+	return LOADED[loadedTextureName].visibleName;
+}
+
+
+function texture_path(name){
+	return urlprefix+TEXTURES[name].path;
+}
+
+
+function get_texture(textureName){
+	return TEXTURES[textureName].tex;
+}
+
+function get_map_layers(){
+	let out = [];
+	for(let layername in MAP_LAYERS){
+		if(MAP_LAYERS.hasOwnProperty(layername)){
+			out.push(layername);
+		}
+	}
+	return out;
+}
+
+
+
+function load_map(){
+	console.log("load map");
+	
+	for(let layername in MAP_LAYERS){
+		if(MAP_LAYERS.hasOwnProperty(layername)){
+			load_any_texture(layername, layername);
+			create_mesh(layername, get_texture(layername));
+		}
+	}
+	
+	let rots = [
+		[0,            1*-Math.PI/2],
+		[3*-Math.PI/2, 2*-Math.PI/2],
+	];
+	
+	// create other 3 play areas:
+	for(let y = 0; y < 2; y++){
+		for(let x = 0; x < 2; x++){
+			if(!(x == 0 && y == 0)){
+				for(let layername in MAP_LAYERS){
+					if(MAP_LAYERS.hasOwnProperty(layername)){
+						let mesh = MESHES[layername][0].clone();
+						mesh.position.x = x*MAP_W;
+						mesh.position.y = -y*MAP_H;
+						mesh.rotation.z = rots[y][x];
+						mesh.name = "map-"+y+"-"+x;
+						MESHES[layername].push(mesh);
+						scene.add(mesh);
+					}
+				}
+			}
+		}
+	}
+	
+	console.log(MESHES);
+
+	// clone textures
+	//let texture = shieldTex.clone();
+	//texture.needsUpdate = true;
+}
+
+
+
+
+
+
+function pow_size(size){
+	let power = 0;
+	while(size > Math.pow(2, power)){
+		power++;
+	}
+	return Math.pow(2, power);
+}
+
+
+
+function correct_texture_size(image, warning = false){
+	let pow_width = pow_size(image.width);
+	let pow_height = pow_size(image.height);
+	// dont resize image if not necessary:
+	if(pow_width == image.width && pow_height == image.height){
+		return image;
+	}
+	
+	if(warning){
+		console.warn("resizing image to power of two size ("+pow_width+"x"+pow_height+"): "+image.src);
+	}
+	
+	const canvas = document.createElement('canvas');
+	const context = canvas.getContext('2d');
+
+	canvas.width = pow_width;
+	canvas.height = pow_height;
+	
+	context.drawImage(image, 0, 0);
+	
+	/*
+	const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+	var data = imageData.data;
+	for(var i = 0; i < data.length; i += 4){
+		// set pixel transparent if its black:
+		if(data[i] == 0 && data[i+1] == 0 && data[i+2] == 0){
+			data[i+3] = 0;
+		}
+	}
+
+	context.putImageData(imageData, 0, 0);
+	// update the texture with the modified image data
+	//texture.image = canvas;
+	//texture.needsUpdate = true;
+	*/
+
+	return canvas;
+}
+
+
+/*
+
+// generate_collision_data generate collision data
+function generate_hit_data(tex){
+	let data_w = tex.image.width;
+	let data_h = tex.image.height;
+	
+	let outData = new Uint8Array(data_w*data_h);
+	
+	const tempCanvas = document.createElement('canvas');
+	tempCanvas.width = data_w;
+	tempCanvas.height = data_h;
+
+	const tempCtx = tempCanvas.getContext('2d');
+	tempCtx.drawImage(tex.image, 0, 0);
+
+	const imageData = tempCtx.getImageData(0, 0, data_w, data_h);
+	
+	for(let y = 0; y < data_h; y++){
+		for(let x = 0; x < data_w; x++){
+			outData[y*data_w+x] = imageData.data[y*data_w*4+x*4+3]; // +3 = alpha channel.
+		}
+	}
+	
+	return outData;
+}
+
+*/
+
+
+function create_mesh(meshName, tex){
+	let geometry = new THREE.PlaneGeometry(MAPCONST.size16x16.w, MAPCONST.size16x16.h);
+	let material = new THREE.MeshBasicMaterial({map: tex, color: 0xFFFFFF});
+	material.transparent = true;
+	material.opacity = 1;
+	material.side = THREE.DoubleSide;
+	
+	let mesh = new THREE.Mesh(geometry, material);
+	let mscale = 1;
+	mesh.visible = true;
+	mesh.position.x = 0;
+	mesh.position.y = 0;
+	mesh.position.z = MAP_LAYERS[meshName].z;
+	mesh.name = "map-0-0";
+
+	//mesh.rotation.x = -Math.PI/2;
+	mesh.scale.set(mscale,mscale,mscale);
+	MESHES[meshName].push(mesh);
+	scene.add(MESHES[meshName][MESHES[meshName].length-1]);
+}
+
+
+
+function load_any_texture(textureName, loadedTextureName){
+	set_loaded_flag(loadedTextureName, false);
+	TEXTURES[textureName].tex = load_map_tex(texture_path(textureName), loadedTextureName);
+	return TEXTURES[textureName].tex;
+}
+
+
+
+// loadedTextureName links to loaded areay.
+function load_map_tex(path, loadedTextureName){
+	return new THREE.TextureLoader().load(path, function(tex){
+		//tex.image = correct_texture_size(tex.image);
+		set_loading_desc(get_loaded_visibleName(loadedTextureName)+" texture loaded");
+		
+		tex.minFilter = THREE.LinearFilter;
+		tex.magFilter = THREE.LinearFilter;
+		
+		if(force_nearest_globally){
+			tex.minFilter = THREE.NearestFilter;
+			tex.magFilter = THREE.NearestFilter;
+		}
+		
+		tex.repeat.x = 1;
+		tex.repeat.y = 1;
+		
+		tex.wrapS = THREE.RepeatWrapping;
+		tex.wrapT = THREE.RepeatWrapping;
+
+		set_loaded_flag(loadedTextureName, true);
+	}, null, function(err){
+		set_loaded_flag(loadedTextureName, true);
+		show_texture_loading_warning(err);
+	});
+}
+
+
+
+pre_init();
+animate();
+
+
+
+var KEYS = {};
+
+// key_pressed
+function key_down(keyCode){
+	if(KEYS.hasOwnProperty(keyCode)){
+		return KEYS[keyCode];
+	}
+	return false;
+}
+
+
+function stopEvent(event){
+	if(typeof event.preventDefault !== "undefined"){
+		event.preventDefault();
+	}
+	if(typeof event.stopPropagation !== "undefined"){
+		event.stopPropagation();
+	}
+}
+
+
+$(window).focus(function() {
+    window_focus = true;
+	play_sound("_blip2");
+	if(!game_paused_by_enter){
+		game_paused = false;
+		game_paused_by_enter = false;
+		update_pause_screen();
+	}
+}).blur(function() {
+    window_focus = false;
+	play_sound("_blip2");
+	if(!game_paused_by_enter){
+		game_paused = true;
+		game_paused_by_enter = false;
+		update_pause_screen();
+	}
+});
+
+
+function update_pause_screen(){
+	if(game_paused){
+		if(game_paused_by_enter){
+			$("#by_enter").show();
+			$("#by_click").hide();
+		}else{
+			$("#by_enter").hide();
+			$("#by_click").show();
+		}
+		$("#pause_container").css("display", "table");
+	}else{
+		$("#pause_container").css("display", "none");
+	}
+}
+
+
+
+
+
+$(window).bind('beforeunload', function(){
+	return null; // disabled for dev mode...
+	return 'Are you sure you want to leave?'; // modern browsers will show their own message instead of this.
+});
+
+
+
+
+// keys
+document.addEventListener("keydown", onDocumentKeyDown, false);
+function onDocumentKeyDown(event){
+	var keyCode = event.which;
+	
+	if(!game_paused && gameLoadedVar){
+		KEYS[event.which] = true;
+		
+		console.log("keydown = "+keyCode);
+		
+		if(keyCode == 115){ // f4
+			guivisible ^= 1;
+
+			if(guivisible){
+				$("#gui").show();
+			}else{
+				$("#gui").hide();
+			}
+			
+			onWindowResize();
+		}
+	} // !game_paused
+	
+	// allow pause button to work at all times:
+	if(keyCode == 27){ // 'esc'
+		if(gameLoadedVar){
+			game_paused ^= 1;
+			game_paused_by_enter = game_paused;
+			play_sound("_blip");
+			update_pause_screen();
+		}
+	}
+}
+
+
+
+window.addEventListener("contextmenu", function(event){
+	if(!contextmenu_enabled){
+		event.preventDefault();
+	}
+});
+
+
+
+
+var SOUNDS = {
+	// sounds last element is sound volume.
+
+	//plane_flip:       [1,1,0,0.234,0.343,0.504,0.296,0,-0.241009,0,0.267,0.07778,0,0,0.365,0,0.718354,0,0,1,0,0,0,0,0.332],
+	plane_flip: [1,3,0.164,0.243,0,0.383,0.358,0,0.249,-0.035681,0.049863,0.004714,-0.081,-0.007549,1,-0.05378,1,-0.377,-0.07,1.040697,-0.011889,0.015896,0.116385,0.030281,0.176],
+	explosion_plane:  [1,3,0,0.354736,0.590014,0.775,0.074,0,0,0,0,0,0.295512,0.676919,0,0,0,0.176156,-0.054911,1,0,0,0,0,0.1068],
+	explosion_bomb:   [1,3,0,0.287594,0.51717,0.855,0.117312,0,0,0,0.652,0.66,0,0,0,0,0,-0.146964,-0.004699,    1,0,0,0,0,0.25],
+	//exp_2:          [1,3,0,0.287594,0.51717,0.855,0.117312,0,0,0,0.652,0.66,0,0,0,0,0,-0.146964,-0.004699,0.214,0,0,0,0,0.25],
+					  
+	explosion_bullet: [1,3,0,0.209,0.389,0.58,0.117312,0,0,0,0.652,0.66,0,0,0,0,0,-0.146964,-0.004699,0.717,-0.057,0,0,0,0.15],
+	shotgun_bullet:   [1,3,0,0.017927,0,0.445,0.482781,0,-0.312528,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0.033],
+	plane_machinegun: [1,3,0,0.373,0.413,0.521,0.078499,0,0.069127,0,0,0,0,0,0,0,0,-0.202749,-0.23743,0.883,-0.237,0,0,0,0.18],
+	antiair_gun:      [1,3,0,0.294,0.355,0.494,0.053,0,0.192,0,0,0,0,0,0,0,0,-0.202749,-0.23743,0.883,-0.237,0,0,0,0.13],
+	//superspeed:       [1,3,0,0.37668,0.751589,0.93,0.078499,0,0.069127,0,0,0,0,0,0,0,0,-0.202749,-0.23743,1,0,0,0,0,0.1068],
+	bomb_drop:        [1,1,0,0.291667,0,1,0.898,0,-0.094,-0.066,0,0,0,0,0.26295,0,0,0,0,1,0,0,0,0,0.031068],
+	bomb_splash:      [1,3,0,0.210467,0,0.554,0.279,0,0.167627,0,0,0,0,0,0.187778,0,0,0,0,1,0,0,0,0,0.107],
+	plane_splash:     [1,3,0,0.538,0.365,0.68,0.194,0,0.167627,0,0,0,0,0,0.187778,0,0,0,0,1,0,0,0,0,0.113],
+	bullet_splash:    [1,3,0,0.12,0,0.437,0.279,0,0.167627,0,0,0,0,0,0.187778,0,0,0,0,1,0,0,0,0,0.107],
+	shotgun_splash:   [1,3,0,0.12,0,0.437,0.279,0,0.167627,0,0,0,0,0,0.187778,0,0,0,0,1,0,0,0,0,0.025],
+	/*
+	epic_shot: [1,3,0,0.287594,0.242,0.971,0.87,0,-0.567,-0.519,0.652,0.66,-0.46,0,0,0,0.545,0.509,-0.236,1,-0.46,0.653,0,0.214,0.25],
+	weird: [1,0,0.010329,0.368026,0.267228,0.399649,0.167153,0,0.14828,0.107487,0.352807,-0.240237,-0.039997,-0.01731,0.78035,0.001718,-0.427861,-0.085225,0.305644,0.838106,-0.080457,0.031704,-0.174818,-0.016129,0.414],
+	*/
+	
+	//////////
+	// one-dimensional sounds only: no distance adjustments at all:
+	// must start with underscore.
+	_blip: [1,1,0,0.005078,0.532665,0.439482,0.614439,0,0,0,0,0,0.554557,0.53357,0,0,0,0,0,1,0,0,0,0,0.1068],
+	_blip2: [1,1,0,0.084824,0.429053,0.351,0.391,0,0,0,0,0,-0.355,0.455,0,0,0,0,0,1,0,0,0,0,0.1081],
+	//_morse_beep_long: [1,1,0,0.431,0,0.177,0.529172,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0.1,0,0.1068],
+	//_morse_beep_long_failure: [1,1,-0.058058,0.431,-0.030879,0.196496,0.529172,0,-0.056779,-0.035681,0.049863,0.004714,0.005416,-0.007549,1,-0.05378,0.012392,-0.0199,-0.028047,1.040697,-0.011889,0.015896,0.116385,0.030281,0.1068],
+	//_morse_beep_short: [1,1,0,0.286,0,0.177,0.529172,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0.1,0,0.1068],
+};
+
+
+
+</script>
+
+
+</body>
+</html>
