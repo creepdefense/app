@@ -1,0 +1,47 @@
+
+# define map name as it would appear in the game.
+# you can use spaces in the name, but map files cannot have spaces.
+# description will be shown only on map selector & game room.
+[mapinfo]
+name = Multimap v1
+desc = Testing 1v1v2 gamemode.
+author = Vigor
+
+[windows]
+blueworld_90 = 0,0/0
+minilavachain = 1,0/90
+minilavachain = 1,1/180
+
+
+
+#############################
+# HELP:
+#############################
+#
+# window positions:
+# 0,0 = top left
+# 1,0 = top right
+# 0,1 = bottom left 
+# 1,1 = bottom right
+# example:
+# 1,1/180 = bottom right with 180 degree rotation
+#
+# defaults would be:
+# for 1v1v1v1 maps:
+# mapname = 0,0/0
+# mapname = 1,0/90
+# mapname = 1,1/180
+# mapname = 0,1/270
+#
+# for 2v2 maps (horizontal):
+# mapname = 0,0/0
+# mapname = 0,1/180
+#
+# for 2v2 maps (vertical):
+# mapname = 0,0/0
+# mapname = 1,0/180
+#
+# for 32x32 maps:
+# mapname = 0,0/0
+#
+#############################
