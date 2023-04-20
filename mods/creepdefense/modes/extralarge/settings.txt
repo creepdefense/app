@@ -1,0 +1,3 @@
+# tilesize cannot be changed for normal, small and large submodes!
+tilesize = 40
+health_bar_width = 33

@@ -1,0 +1,132 @@
+
+
+# its possible to add .wav files as sounds too.
+# if done so, no other information can be given.
+[custom_sound]
+filename = wavfile.wav
+
+
+
+[annihilator_shot]
+wave_type = noise
+sound_vol = 0.5675
+env_decay_vol = 1.0
+env_attack = 0.0
+env_decay = 1.0
+env_sustain = 1.0
+env_punch = 0.57
+base_freq = 0.3075
+freq_ramp = -0.79
+freq_dramp = 0.084999
+vib_strength = 0.245
+vib_speed = 1.0
+arp_mod = 0.605
+arp_speed = 0.71
+repeat_speed = 0.757501
+pha_offset = -0.075
+pha_ramp = -0.190001
+lpf_freq = 1.0
+lpf_ramp = 1.0
+lpf_resonance = 0.0
+hpf_freq = 0.0
+hpf_ramp = -1.0
+duty = 0.5
+duty_ramp = 0.0
+freq_limit = 0.0
+noise_buf_size = 32
+total_samples = 8
+
+
+
+[rocket_shot]
+wave_type = noise
+sound_vol = 0.72
+env_decay_vol = 1.0
+env_attack = 0.0
+env_decay = 0.525
+env_sustain = 0.325
+env_punch = 0.995
+base_freq = 0.435
+freq_ramp = -0.79
+freq_dramp = 0.084999
+vib_strength = 0.44
+vib_speed = 0.62
+arp_mod = -0.24
+arp_speed = 0.995
+repeat_speed = 0.29
+pha_offset = -0.075
+pha_ramp = -0.190001
+lpf_freq = 1.0
+lpf_ramp = 1.0
+lpf_resonance = 0.0
+hpf_freq = 0.0
+hpf_ramp = -1.0
+duty = 0.5
+duty_ramp = 0.0
+freq_limit = 0.0
+noise_buf_size = 32
+total_samples = 8
+
+
+
+[laser_shot]
+wave_type = squarewave
+sound_vol = 0.4575
+env_decay_vol = 0.0
+env_attack = 0.0
+env_decay = 0.62986
+env_sustain = 0.365
+env_punch = 0.47878
+base_freq = 0.55495
+freq_ramp = -0.224999
+freq_dramp = 0.0
+vib_strength = 0.0
+vib_speed = 0.0
+arp_mod = 0.0
+arp_speed = 0.0
+repeat_speed = 0.0
+pha_offset = 0.0
+pha_ramp = 0.0
+lpf_freq = 1.0
+lpf_ramp = 0.0
+lpf_resonance = 0.0
+hpf_freq = 0.0
+hpf_ramp = 0.0
+duty = 0.0
+duty_ramp = 0.0
+freq_limit = 0.0
+noise_buf_size = 32
+total_samples = 8
+
+
+
+[game_lost]
+wave_type = sawtooth
+sound_vol = 0.52
+env_decay_vol = 1.0
+env_attack = 0.0
+env_decay = 1.0
+env_sustain = 1.0
+env_punch = 0.99
+base_freq = 0.35
+freq_ramp = -0.14
+freq_dramp = 0.08
+vib_strength = 0.0
+vib_speed = 0.94
+arp_mod = 0.6
+arp_speed = 0.73
+repeat_speed = 0.04
+pha_offset = -0.5
+pha_ramp = -0.08
+lpf_freq = 1.0
+lpf_ramp = 1.0
+lpf_resonance = 0.0
+hpf_freq = 0.0
+hpf_ramp = -1.0
+duty = 0.0
+duty_ramp = -1.0
+freq_limit = 0.0
+noise_buf_size = 32
+total_samples = 8
+
+

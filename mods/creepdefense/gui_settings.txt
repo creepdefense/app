@@ -1,0 +1,13 @@
+
+# these are used in the strategy buttons list
+# and also when pressing strategy shortkey; the icon on
+# the tower will be colored with that color.
+
+[strategy_button_colors]
+closest   = 33AA33
+weakest   = FFFF1E
+slowest   = 444444
+farthest  = FFFFFF
+strongest = FF2200
+fastest   = 6666FF
+

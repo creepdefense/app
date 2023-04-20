@@ -1,0 +1,4 @@
+
+# how many frames does it take to issue a command on a tower.
+action_time = 150
+

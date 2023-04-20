@@ -1,0 +1,150 @@
+# tower settings limitations:
+# - max 99 towers and 99 upgrades technically possible to add.
+
+[settings]
+# example: with 75% a tower that costs 1000$ 
+#          will give you 750$ when you sell it.
+sell_percent = 75
+
+
+# this list allows you to call a specific tower with different name
+# since it would be hard to remember only numbers.
+# you need to remember the numbers only once here and then
+# its much easier to mod the game with these names!
+# note: when defining tower stats, it will use hardcoded
+#       prefix for the tower levels, starting from 1 and ending to 4.
+# note: you cannot have a number in the end of the name.
+[towernamevars]
+TOWER_1 = TOWER_BASIC
+TOWER_2 = TOWER_SLOW
+TOWER_3 = TOWER_SPLASH
+TOWER_4 = TOWER_ROCKET
+TOWER_5 = TOWER_SPEED
+TOWER_6 = TOWER_ULTIMATE
+
+
+# list of buildable towers from the menu.
+# tower level number comes after the tower name.
+# the number at left is the ordering number in the menu for tower.
+# that number can be letters too, as long as it is sorted correctly.
+# note: you need leading zeroes if the number exceeds 2 characters, or else the sorting doesnt work correctly.
+[menu_towers]
+1 = TOWER_BASIC1
+2 = TOWER_SLOW1
+3 = TOWER_SPLASH1
+4 = TOWER_ROCKET1
+5 = TOWER_SPEED1
+6 = TOWER_ULTIMATE1
+
+
+
+# the path is always "modes/*sizemod*/towers/"
+# sizemod is "normal", "small" or "large".
+[graphics]
+TOWER_BASIC    = 1.bmp
+TOWER_SLOW     = 2.bmp
+TOWER_SPLASH   = 3.bmp
+TOWER_ROCKET   = 4.bmp
+TOWER_SPEED    = 5.bmp
+TOWER_ULTIMATE = 6.bmp
+
+
+# tower edge opacity. higher value means darker. range 0.0 to 1.0
+[edge_strength]
+TOWER_BASIC    = 0.4
+TOWER_SLOW     = 0.6
+TOWER_SPLASH   = 0.5
+TOWER_ROCKET   = 0.4
+TOWER_SPEED    = 0.4
+TOWER_ULTIMATE = 0.4
+
+
+# this list is used to give name for each upgradeable tower, 
+# so you dont need to repeat the name 4 times for each tower!
+# note: you cannot change the name at left side of = mark.
+[names]
+TOWER_BASIC    = Laser
+TOWER_SLOW     = Freezer
+TOWER_SPLASH   = Electrogun
+TOWER_ROCKET   = Plasma rocket
+TOWER_SPEED    = Tesla coil
+TOWER_ULTIMATE = Annihilator
+
+
+# same here, avoid repetition:
+# note: you cannot change the name at left side of = mark.
+[default_strategies]
+TOWER_BASIC    = CLOSEST
+TOWER_SLOW     = FASTEST
+TOWER_SPLASH   = CLOSEST
+TOWER_ROCKET   = STRONGEST
+TOWER_SPEED    = STRONGEST
+TOWER_ULTIMATE = STRONGEST
+
+
+# the sounds which comes when the tower shoots.
+# sound names refers to "sound_settings.txt" labels.
+[shot_sounds]
+TOWER_BASIC    = laser_shot
+TOWER_SLOW     = laser_shot
+TOWER_SPLASH   = laser_shot
+TOWER_ROCKET   = laser_shot
+TOWER_SPEED    = laser_shot
+TOWER_ULTIMATE = laser_shot
+
+
+# this list is used to define the basic 4 colors for different tower levels, colors are in hex format.
+# each color must be defined for each tower level separately, because ULTIMATE tower has only 2 levels.
+# you can define any variable names here, but they must match the [stats] variable names.
+[colors]
+Green = 00FF00
+Blue  = 0000FF
+Red   = FF0000
+White = FFFFFF
+
+
+[stats]
+# note: you cannot change the name at left side of = mark.
+# ranges and aoe are in pixels. 
+# dmg = damage
+# rel = reload time, how many frames does it wait until it can shoot again.
+# range = radius how far the tower can shoot.
+# aoe = area of effect, a radius how far from the impact area it will affect on other creeps.
+# decay = at which % from the center of the impact area the damage will decay eventually to zero at the edges.
+#         with aoe 100 and decay 0.75, the damage will start to decay at aoe 75 and at the very edges the damage is lowest.
+#         EXCEPTION: with decay 0.0, the damage does not decay at all! Same applies to decay 1.0, since the decay starts at the edges and ends to edges.
+# slowM = slow multiplier, how much speed is decreased from the creep speed when hit with slow effect. 
+#         if creep speed = 200 and slowM = 0.3, then the creep will move with 200-(200*0.3) = 140 speed.
+#         if no slow effect, this value should be set to zero, however slowT value tells the game if the tower has slow effect or not.
+# slowT = slow time, how long will the slow effect last. if zero, then the tower has no slowing effect at all.
+# splash = will it give insta splash damage when shot? you have to define aoe to make this work! note: rockets cannot have this feature enabled.
+# NO_UPG = a tower cannot be upgraded anymore.
+# 
+#               cost, range, rel, dmg,   aoe, decay, slowM, slowT, upgradeto, splash, color,   description
+TOWER_BASIC1    = {50,    35,  13,  25,    0,   0,    0,     0,   TOWER_BASIC2,    0, Green,  "Cheap upgrades"}
+TOWER_BASIC2    = {100,   45,  13,  50,    0,   0,    0,     0,   TOWER_BASIC3,    0, Blue,   "Cheap upgrades"}
+TOWER_BASIC3    = {150,   55,  13,  75,    0,   0,    0,     0,   TOWER_BASIC4,    0, Red,    "Cheap upgrades"}
+TOWER_BASIC4    = {200,   65,  13,  100,   0,   0,    0,     0,   NO_UPG,          0, White,  "Cheap long range"}
+
+TOWER_SLOW1     = {100,   35,  15,  25,    0,   0,    0.3,   40,  TOWER_SLOW2,     0, Green,  "Slows target"}
+TOWER_SLOW2     = {200,   45,  16,  50,    0,   0,    0.35,  40,  TOWER_SLOW3,     0, Blue,   "Slows target"}
+TOWER_SLOW3     = {400,   50,  17,  75,    0,   0,    0.45,  50,  TOWER_SLOW4,     0, Red,    "Slows target"}
+TOWER_SLOW4     = {3000,  55,  18,  100,   25,  0.7,  0.5,   50,  NO_UPG,          1, White,  "Slows multiple targets"}
+
+TOWER_SPLASH1   = {250,   40,  15,  50,    35,  0.7,  0,     0,   TOWER_SPLASH2,   1, Green,  "Fast area damage"}
+TOWER_SPLASH2   = {750,   45,  12,  200,   35,  0.7,  0,     0,   TOWER_SPLASH3,   1, Blue,   "Fast area damage"}
+TOWER_SPLASH3   = {3000,  50,  10,  500,   35,  0.6,  0,     0,   TOWER_SPLASH4,   1, Red,    "Fast area damage"}
+TOWER_SPLASH4   = {7500,  55,  10,  1150,  35,  0.5,  0,     0,   NO_UPG,          1, White,  "Fast area damage"}
+
+TOWER_ROCKET1   = {1000,  50,  75,  1000,  25,  0.7,  0,     0,   TOWER_ROCKET2,   0, Green,  "Area damage"}
+TOWER_ROCKET2   = {3000,  60,  75,  3000,  25,  0.7,  0,     0,   TOWER_ROCKET3,   0, Blue,   "Area damage"}
+TOWER_ROCKET3   = {7500,  70,  65,  7500,  30,  0.6,  0,     0,   TOWER_ROCKET4,   0, Red,    "Area damage"}
+TOWER_ROCKET4   = {15000, 80,  60,  16500, 35,  0.5,  0,     0,   NO_UPG,          0, White,  "Area damage"}
+
+TOWER_SPEED1    = {1000,  50,  9,   225,   0,   0,    0,     0,   TOWER_SPEED2,    0, Green,  "Fast reload"}
+TOWER_SPEED2    = {3000,  55,  7,   550,   0,   0,    0,     0,   TOWER_SPEED3,    0, Blue,   "Fast reload"}
+TOWER_SPEED3    = {7500,  60,  5,   1100,  0,   0,    0,     0,   TOWER_SPEED4,    0, Red,    "Fast reload"}
+TOWER_SPEED4    = {15000, 65,  3,   1800,  0,   0,    0,     0,   NO_UPG,          0, White,  "Fast reload"}
+
+TOWER_ULTIMATE1 = {20000, 100, 100, 25000, 0,   0,    0,     0,   TOWER_ULTIMATE2, 0, Green,  "Long range"}
+TOWER_ULTIMATE2 = {50000, 150, 50,  40000, 0,   0,    0,     0,   NO_UPG,          0, White,  "Ultra long range"}

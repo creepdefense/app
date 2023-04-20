@@ -1,0 +1,286 @@
+
+# this file contains tower weapon graphical effect settings.
+
+# note: the number after the dot in the labels is only used for sorting.
+# it is assumed that the labels are given in the order from lvl 1 to 4.
+
+[electro_splash.1]
+color = BBFFBB
+trans = 0.36
+thickness = 1.0
+bg.color = 00FF00
+bg.trans = 0.225
+bg.thickness = 3.6
+
+[electro_splash.2]
+color = DDDDFF
+trans = 0.36
+thickness = 1.2
+bg.color = 0000FF
+bg.trans = 0.27
+bg.thickness = 4.8
+
+[electro_splash.3]
+color = FFDDDD
+trans = 0.54
+thickness = 1.35
+bg.color = FF0044
+bg.trans = 0.54
+bg.thickness = 5.4
+
+[electro_splash.4]
+color = FFFFFF
+trans = 0.45
+thickness = 1.35
+bg.color = BBBBFF
+bg.trans = 0.315
+bg.thickness = 4.8
+
+
+
+[slowtower_shot.1]
+color = BBFFBB
+trans = 0.8
+thickness = 1.0
+bg.color = 00FF00
+bg.trans = 0.5
+bg.thickness = 3.6
+
+[slowtower_shot.2]
+color = DDDDFF
+trans = 0.8
+thickness = 1.2
+bg.color = 0000FF
+bg.trans = 0.6
+bg.thickness = 4.8
+
+[slowtower_shot.3]
+color = FFDDDD
+trans = 0.8
+thickness = 1.35
+bg.color = FF0044
+bg.trans = 0.8
+bg.thickness = 5.4
+
+[slowtower_shot.4]
+color = FFFFFF
+trans = 1.0
+thickness = 1.35
+bg.color = BBBBFF
+bg.trans = 0.7
+bg.thickness = 4.8
+
+
+
+[lasertower_shot.1]
+color = DDFFDD
+trans = 0.8
+thickness = 1.2
+bg.color = 00FF00
+bg.trans = 0.7
+bg.thickness = 3.6
+
+[lasertower_shot.2]
+color = DDDDFF
+trans = 0.8
+thickness = 1.2
+bg.color = 0000FF
+bg.trans = 0.6
+bg.thickness = 4.8
+
+[lasertower_shot.3]
+color = FFDDDD
+trans = 0.8
+thickness = 1.35
+bg.color = FF0044
+bg.trans = 0.8
+bg.thickness = 5.4
+
+[lasertower_shot.4]
+color = FFFFFF
+trans = 1.0
+thickness = 1.35
+bg.color = BBBBFF
+bg.trans = 0.7
+bg.thickness = 4.8
+
+
+
+[teslatower_shot.1]
+color = DDFFDD
+trans = 0.5
+thickness = 2.2
+bg.color = 00FF00
+bg.trans = 0.3
+bg.thickness = 6.2
+
+[teslatower_shot.2]
+color = DDDDFF
+trans = 0.6
+thickness = 2.4
+bg.color = 0000FF
+bg.trans = 0.7
+bg.thickness = 9.6
+
+[teslatower_shot.3]
+color = FFBBBB
+trans = 0.8
+thickness = 2.4
+bg.color = FF0022
+bg.trans = 0.9
+bg.thickness = 10.8
+
+[teslatower_shot.4]
+color = FFFFFF
+trans = 0.7
+thickness = 2.4
+bg.color = BBBBFF
+bg.trans = 0.4
+bg.thickness = 9.6
+
+
+
+[ultimatetower_shot.1]
+color = DDFFDD
+trans = 0.5
+thickness = 3.6
+bg.color = 00FF00
+bg.trans = 0.5
+bg.thickness = 10.8
+
+[ultimatetower_shot.4]
+color = FFFFFF
+trans = 0.6
+thickness = 5.4
+bg.color = BBBBFF
+bg.trans = 0.5
+bg.thickness = 19.2
+
+
+
+[ultimatetower_splash.1]
+color = DDFFDD
+trans = 1.0
+thickness = 40
+bg.color = 00FF00
+bg.trans = 0.4
+bg.thickness = 80
+
+[ultimatetower_splash.4]
+color = FFFFFF
+trans = 1.0
+thickness = 40
+bg.color = BBBBFF
+bg.trans = 0.6
+bg.thickness = 80
+
+
+
+# used for laser,tesla,freezer,electrogun
+[small_splash.1]
+color = BBFFBB
+trans = 1.0
+thickness = 10
+bg.color = 44FF44
+bg.trans = 0.4
+bg.thickness = 18
+
+[small_splash.2]
+color = DDDDFF
+trans = 1.0
+thickness = 11
+bg.color = 8888FF
+bg.trans = 0.9
+bg.thickness = 20
+
+[small_splash.3]
+color = FFDDDD
+trans = 1.0
+thickness = 12
+bg.color = FFAA77
+bg.trans = 0.9
+bg.thickness = 22
+
+[small_splash.4]
+color = FFFFFF
+trans = 1.0
+thickness = 14
+bg.color = EEEEFF
+bg.trans = 0.6
+bg.thickness = 26
+
+
+
+
+[rockettower_splash.1]
+color = BBFFBB
+trans = 0.8
+thickness = 16.2
+bg.color = 44FF44
+bg.trans = 0.4
+bg.thickness = 35
+
+[rockettower_splash.2]
+color = DDDDFF
+trans = 1.0
+thickness = 16.2
+bg.color = 8888FF
+bg.trans = 0.8
+bg.thickness = 40
+
+[rockettower_splash.3]
+color = FFDDDD
+trans = 1.0
+thickness = 16.2
+bg.color = FFAA77
+bg.trans = 0.7
+bg.thickness = 47.4
+
+[rockettower_splash.4]
+color = FFFFFF
+trans = 1.0
+thickness = 16.2
+bg.color = EEEEFF
+bg.trans = 0.6
+bg.thickness = 47.4
+
+
+
+[rockettower_bullet.1]
+color = CCFFCC
+edgecolor = 118811
+trans = 1.0
+thickness = 3.5
+bg.color = 11FF11
+bg.trans = 0.1
+bg.thickness = 12.0
+
+[rockettower_bullet.2]
+color = CCCCFF
+edgecolor = 222288
+trans = 1.0
+thickness = 4.0
+bg.color = 3333FF
+bg.trans = 0.2
+bg.thickness = 15.0
+
+[rockettower_bullet.3]
+color = FFCCCC
+edgecolor = 882222
+trans = 1.0
+thickness = 5.0
+bg.color = FF4466
+bg.trans = 0.2
+bg.thickness = 15.0
+
+[rockettower_bullet.4]
+color = FFFFFF
+edgecolor = 777788
+trans = 1.0
+thickness = 5.0
+bg.color = DDDDFF
+bg.trans = 0.15
+bg.thickness = 15.0
+
+
+
