@@ -1,0 +1,43 @@
+# Map data
+# compiled by CreepTD Map Editor 1.0.1
+# at Thu, 08 Mar 2012 16:19:03 GMT
+
+@author dcode
+@strict
+@size 16x16
+
+# Path segments
+ 7,16 start
+7,15
+7,14
+7,13
+7,12
+7,11
+7,10
+7,9
+7,8
+7,7
+7,6
+7,5
+6,5
+5,5
+5,6
+5,7
+6,7
+7,7
+8,7
+9,7
+10,7
+11,7
+12,7
+13,7
+13,6
+14,6
+14,7
+14,8
+15,8
+15,7
+ 16,7 end
+
+
+# No blocked coordinates defined

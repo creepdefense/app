@@ -1,0 +1,50 @@
+###
+### MAP_TESTMAP
+###
+# set the Background:
+
+
+# mark player context with one of the following colors:
+# GRAY WHITE BLUE RED YELLOW MAGENTA CYAN GREEN:
+# or if you do not want to use it for this map:
+# just set it to:
+# OFF
+SET_ALPHA_BACKGROUND_COLOR:OFF
+
+# Next lines represent cells
+# where no tower can be built.
+# Just like a holy land.
+#
+# x y coordinates are seperated by
+# semicolon
+
+# This is the way where creeps walk.
+#
+# x y coordinates are seperated by
+# comma.
+
+6,4
+7,4
+8,4
+9,4
+10,4
+11,3
+11,3
+11,3
+11,3
+13,4
+13,4
+13,4
+13,4
+13,4
+12,6
+12,6
+12,6
+12,6
+12,6
+10,5
+6,6
+6,8
+7,10
+8,9
+8,7
